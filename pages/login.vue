@@ -3,8 +3,7 @@
     <el-alert
       v-if="isFaild"
       title="メールアドレスもしくはパスワードが違います"
-      type="error">
-    </el-alert>
+      type="error"/>
     <el-form ref="form" :model="form" label-position="top">
       <el-form-item label="メールアドレス">
         <el-input v-model="form.email" type="email" />
@@ -20,25 +19,23 @@
 </template>
 
 <script>
-
 export default {
-  data: function () {
+  data: function() {
     return {
       form: {
-        email: '',
-        password: ''
-      },
+        email: "",
+        password: ""
+      }
     }
   },
   computed: {
-    isFaild () {
+    isFaild() {
       return this.$store.state.isLoginFaild
     }
   },
   methods: {
-    onSubmit () {
-      const params = this.form
-      this.$store.dispatch('login', this.form)
+    onSubmit() {
+      this.$store.dispatch("login", this.form)
     }
   }
 }
@@ -46,4 +43,3 @@ export default {
 
 <style>
 </style>
-
