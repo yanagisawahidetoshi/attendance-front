@@ -34,8 +34,8 @@ export default {
     }
   },
   methods: {
-    onSubmit() {
-      this.$store.dispatch("login", this.form)
+    async onSubmit() {
+      await this.$store.dispatch("login", this.form)
     }
   }
 }
