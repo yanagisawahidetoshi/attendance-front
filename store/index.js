@@ -10,7 +10,7 @@ export const actions = {
       const res = await this.$axios.$post("/v1/login", params)
       commit("setCurrentUser", res)
       commit("setIsLoginFaild", false)
-      this.$router.push("/company")
+      this.$router.push("/companies")
     } catch (e) {
       commit("setIsLoginFaild", true)
     }

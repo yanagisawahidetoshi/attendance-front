@@ -24,7 +24,7 @@
         <el-input v-model="form.address" type="text" />
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="onCreate">登録する</el-button>
+        <el-button type="primary" @click="onSubmit">{{ submitText }}</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -32,26 +32,43 @@
 
 <script>
 export default {
-  data() {
-    return {
-      form: {
-        name: "",
-        email: "",
-        zip: "",
-        tel: "",
-        address: ""
+  asyncData({ params, store }) {
+    if (params.key === undefined) {
+      return {
+        form: {
+          id: null,
+          name: null,
+          email: null,
+          zip: null,
+          tel: null,
+          address: null
+        }
       }
+    }
+    return {
+      form: Object.assign({}, store.state.company.companies[params.key])
     }
   },
   computed: {
     errorMessages() {
       return this.$store.state.company.errorMesages
+    },
+    submitText() {
+      if (this.form.id) {
+        return "更新する"
+      } else {
+        return "登録する"
+      }
     }
   },
   methods: {
-    async onCreate() {
-      await this.$store.dispatch("company/createCompany", this.form)
-      this.$router.push("/company")
+    async onSubmit() {
+      if (this.form.id) {
+        await this.$store.dispatch("company/editCompany", this.form)
+      } else {
+        await this.$store.dispatch("company/createCompany", this.form)
+      }
+      this.$router.push("/companies")
     }
   }
 }

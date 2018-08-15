@@ -28,6 +28,18 @@ export const actions = {
       throw e
     }
   },
+  async editCompany({ commit, rootState }, params) {
+    try {
+      this.$axios.defaults.headers.Authorization =
+        rootState.currentUser.access_token
+      await this.$axios.$put("/v1/companies/update", params)
+      commit("createSuccess")
+      commit("createFail", null)
+    } catch (e) {
+      commit("createFail", e.response.data.message)
+      throw e
+    }
+  },
   async deleteCompany({ commit, rootState }, id) {
     try {
       const params = { id: id }

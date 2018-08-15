@@ -24,13 +24,13 @@
         <template slot-scope="scope">
           <el-button-group>
             <el-button type="primary" @click="handleClickSetting(scope.$index)">選択</el-button>
-            <el-button type="success" @click="handleClickSetting(scope.$index)">編集</el-button>
+            <el-button type="success" @click="handleClickEdit(scope.$index)">編集</el-button>
             <el-button type="danger" @click="handleClickDelete(scope.$index)">削除</el-button>
           </el-button-group>
         </template>
       </el-table-column>
     </el-table>
-    <nuxt-link to="/company/create">登録する</nuxt-link>
+    <nuxt-link to="/company">登録する</nuxt-link>
   </div>
 </template>
 
@@ -50,6 +50,9 @@ export default {
   methods: {
     handleClickSetting(index) {
       this.$store.dispatch("setCurrentCompany", this.companies[index])
+    },
+    handleClickEdit(index) {
+      this.$router.push("/company/" + index)
     },
     handleClickDelete(index) {
       this.$confirm("削除してよろしいですか", "Warning", {
