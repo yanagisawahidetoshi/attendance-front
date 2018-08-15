@@ -1,16 +1,22 @@
 export const state = () => ({
   isLoginFaild: false,
-  currentUser: {}
+  currentUser: null,
+  currentCompany: null
 })
+
 export const actions = {
-  async login(context, params) {
+  async login({ commit }, params) {
     try {
       const res = await this.$axios.$post("/v1/login", params)
-      context.commit("setCurrentUser", res)
-      context.commit("setIsLoginFaild", false)
+      commit("setCurrentUser", res)
+      commit("setIsLoginFaild", false)
+      this.$router.push("/companies")
     } catch (e) {
-      context.commit("setIsLoginFaild", true)
+      commit("setIsLoginFaild", true)
     }
+  },
+  setCurrentCompany({ commit }, company) {
+    commit("setCurrentCompany", company)
   }
 }
 
@@ -20,5 +26,8 @@ export const mutations = {
   },
   setCurrentUser(state, user) {
     state.currentUser = user
+  },
+  setCurrentCompany(state, payload) {
+    state.currentCompany = payload
   }
 }
