@@ -1,11 +1,15 @@
 <template>
   <div>
+    <el-alert
+      v-if="this.$store.state.company.listErrorMessage"
+      :title="this.$store.state.company.listErrorMessage"
+      type="error"
+      show-icon
+    />
     {{ total }}
     <el-table
       :data="companies"
-      highlight-current-row
-      style="width: 100%"
-      @current-change="handleCurrentChange">
+      style="width: 100%">
       <el-table-column
         prop="id"
         label="ID"
@@ -16,6 +20,15 @@
       <el-table-column
         prop="created_at"
         label="登録日"/>
+      <el-table-column>
+        <template slot-scope="scope">
+          <el-button-group>
+            <el-button type="primary" @click="handleClickSetting(scope.$index)">選択</el-button>
+            <el-button type="success" @click="handleClickSetting(scope.$index)">編集</el-button>
+            <el-button type="danger" @click="handleClickDelete(scope.$index)">削除</el-button>
+          </el-button-group>
+        </template>
+      </el-table-column>
     </el-table>
     <nuxt-link to="/company/create">登録する</nuxt-link>
   </div>
@@ -35,8 +48,22 @@ export default {
     }
   },
   methods: {
-    handleCurrentChange(row) {
-      this.$store.dispatch("setCurrentCompany", row)
+    handleClickSetting(index) {
+      this.$store.dispatch("setCurrentCompany", this.companies[index])
+    },
+    handleClickDelete(index) {
+      this.$confirm("削除してよろしいですか", "Warning", {
+        confirmButtonText: "はい",
+        cancelButtonText: "いいえ",
+        type: "warning"
+      })
+        .then(() => {
+          this.$store.dispatch(
+            "company/deleteCompany",
+            this.companies[index].id
+          )
+        })
+        .catch(() => {})
     }
   }
 }

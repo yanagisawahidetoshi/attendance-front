@@ -2,7 +2,8 @@ export const state = () => ({
   companies: null,
   total: 0,
   isCreateSuccess: false,
-  errorMesages: null
+  listErrorMessage: null,
+  createErrorMesages: null
 })
 export const actions = {
   async fetchCompanies({ commit, rootState }) {
@@ -12,7 +13,7 @@ export const actions = {
       const res = await this.$axios.$get("/v1/companies")
       commit("setCompanies", res)
     } catch (e) {
-      console.log(e)
+      commit("setListErrorMessage", e.response.data.message)
     }
   },
   async createCompany({ commit, rootState }, params) {
@@ -24,6 +25,17 @@ export const actions = {
       commit("createFail", null)
     } catch (e) {
       commit("createFail", e.response.data.message)
+      throw e
+    }
+  },
+  async deleteCompany({ commit, rootState }, id) {
+    try {
+      const params = { id: id }
+      this.$axios.defaults.headers.Authorization =
+        rootState.currentUser.access_token
+      await this.$axios.$delete("/v1/companies/delete", { params })
+      commit("deleteCompany", id)
+    } catch (e) {
       throw e
     }
   }
@@ -38,6 +50,15 @@ export const mutations = {
     state.isCreateSuccess = true
   },
   createFail(state, payload) {
-    state.errorMesages = payload
+    state.createErrorMesages = payload
+  },
+  setListErrorMessage(state, payload) {
+    state.listErrorMessage = payload
+  },
+  deleteCompany(state, id) {
+    const index = state.companies.findIndex(company => {
+      return company.id === id
+    })
+    state.companies.splice(index, 1)
   }
 }
