@@ -20,6 +20,7 @@
 
 <script>
 export default {
+  layout: "login",
   data: function() {
     return {
       form: {

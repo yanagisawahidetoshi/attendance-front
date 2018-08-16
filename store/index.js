@@ -1,7 +1,8 @@
 export const state = () => ({
   isLoginFaild: false,
   currentUser: null,
-  currentCompany: null
+  currentCompany: null,
+  activePageIndex: ""
 })
 
 export const actions = {
