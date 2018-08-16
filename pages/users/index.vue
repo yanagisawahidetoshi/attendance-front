@@ -1,14 +1,14 @@
 <template>
   <div>
     <el-alert
-      v-if="this.$store.state.company.listErrorMessage"
-      :title="this.$store.state.company.listErrorMessage"
+      v-if="this.$store.state.user.listErrorMessage"
+      :title="this.$store.state.user.listErrorMessage"
       type="error"
       show-icon
     />
     {{ total }}
     <el-table
-      :data="companies"
+      :data="users"
       style="width: 100%">
       <el-table-column
         prop="id"
@@ -23,37 +23,32 @@
       <el-table-column>
         <template slot-scope="scope">
           <el-button-group>
-            <el-button type="primary" @click="handleClickSetting(scope.$index)">選択</el-button>
             <el-button type="success" @click="handleClickEdit(scope.$index)">編集</el-button>
             <el-button type="danger" @click="handleClickDelete(scope.$index)">削除</el-button>
           </el-button-group>
         </template>
       </el-table-column>
     </el-table>
-    <nuxt-link to="/company">登録する</nuxt-link>
+    <nuxt-link to="/user">登録する</nuxt-link>
   </div>
 </template>
 
 <script>
 export default {
   async fetch({ store }) {
-    await store.dispatch("company/fetchCompanies")
+    await store.dispatch("user/fetchUsers")
   },
   computed: {
-    companies() {
-      return this.$store.state.company.companies
+    users() {
+      return this.$store.state.user.users
     },
     total() {
-      return this.$store.state.company.total
+      return this.$store.state.user.total
     }
   },
   methods: {
-    handleClickSetting(index) {
-      this.$store.dispatch("setCurrentCompany", this.companies[index])
-      this.$router.push("/users")
-    },
     handleClickEdit(index) {
-      this.$router.push("/company/" + index)
+      this.$router.push("/user/" + index)
     },
     handleClickDelete(index) {
       this.$confirm("削除してよろしいですか", "Warning", {
@@ -62,10 +57,7 @@ export default {
         type: "warning"
       })
         .then(() => {
-          this.$store.dispatch(
-            "company/deleteCompany",
-            this.companies[index].id
-          )
+          this.$store.dispatch("user/deleteUser", this.users[index].id)
         })
         .catch(() => {})
     }
